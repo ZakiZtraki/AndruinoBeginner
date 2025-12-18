@@ -46,6 +46,7 @@ An interactive web-based learning platform for the 30-Day Arduino Beginner Cours
    cp backend/.env.example backend/.env
    # Edit backend/.env with your MongoDB URI and JWT secret
    ```
+   The backend will not start unless `JWT_SECRET` is set.
 
 4. **Start MongoDB**
 
