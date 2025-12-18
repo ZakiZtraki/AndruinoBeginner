@@ -718,36 +718,36 @@ AndruinoBeginner/
 
 ## Key Technologies Summary
 
-| Layer | Technology | Purpose |
-|-------|------------|---------|
-| Frontend Framework | React 18 + Vite | UI components, routing, state |
-| Styling | Tailwind CSS | Utility-first responsive design |
-| Code Editor | Monaco Editor | Arduino code editing with syntax highlighting |
-| Simulator | Wokwi Embed API | Run Arduino code in browser |
-| Markdown | react-markdown | Render lesson content |
-| Routing | React Router v6 | Navigation between lessons |
-| Backend | Node.js + Express | REST API server |
-| Database | MongoDB + Mongoose | User data, progress tracking |
-| Authentication | JWT | Secure user sessions |
-| Deployment | Vercel (FE) + Railway (BE) | Production hosting |
-| Version Control | Git + GitHub | Source control, CI/CD |
+| Layer              | Technology                 | Purpose                                       |
+| ------------------ | -------------------------- | --------------------------------------------- |
+| Frontend Framework | React 18 + Vite            | UI components, routing, state                 |
+| Styling            | Tailwind CSS               | Utility-first responsive design               |
+| Code Editor        | Monaco Editor              | Arduino code editing with syntax highlighting |
+| Simulator          | Wokwi Embed API            | Run Arduino code in browser                   |
+| Markdown           | react-markdown             | Render lesson content                         |
+| Routing            | React Router v6            | Navigation between lessons                    |
+| Backend            | Node.js + Express          | REST API server                               |
+| Database           | MongoDB + Mongoose         | User data, progress tracking                  |
+| Authentication     | JWT                        | Secure user sessions                          |
+| Deployment         | Vercel (FE) + Railway (BE) | Production hosting                            |
+| Version Control    | Git + GitHub               | Source control, CI/CD                         |
 
 ---
 
 ## Estimated Timeline
 
-| Phase | Duration | Priority |
-|-------|----------|----------|
-| 1. Project Setup | 1-2 days | High |
-| 2. Data Migration | 2-3 days | High |
-| 3. Core UI Components | 3-4 days | High |
-| 4. Code Editor & Simulator | 3-4 days | High |
-| 5. Videos, Quizzes, Activities | 2-3 days | Medium |
-| 6. Backend API | 3-4 days | High |
-| 7. Frontend-Backend Integration | 2-3 days | High |
-| 8. Dashboard & Analytics | 2-3 days | Medium |
-| 9. Polish & Accessibility | 2-3 days | Medium |
-| 10. Documentation & Deployment | 1-2 days | High |
+| Phase                           | Duration | Priority |
+| ------------------------------- | -------- | -------- |
+| 1. Project Setup                | 1-2 days | High     |
+| 2. Data Migration               | 2-3 days | High     |
+| 3. Core UI Components           | 3-4 days | High     |
+| 4. Code Editor & Simulator      | 3-4 days | High     |
+| 5. Videos, Quizzes, Activities  | 2-3 days | Medium   |
+| 6. Backend API                  | 3-4 days | High     |
+| 7. Frontend-Backend Integration | 2-3 days | High     |
+| 8. Dashboard & Analytics        | 2-3 days | Medium   |
+| 9. Polish & Accessibility       | 2-3 days | Medium   |
+| 10. Documentation & Deployment  | 1-2 days | High     |
 
 **Total estimated time**: 21-34 days for full implementation
 
@@ -784,14 +784,14 @@ AndruinoBeginner/
 
 ## Risk Mitigation
 
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| Wokwi API limitations (free tier) | Medium | Cache simulation results, implement quota monitoring |
-| MongoDB Atlas free tier limits | Low | Monitor usage, plan for upgrade path |
-| Complex markdown parsing | Medium | Extensive testing, manual JSON verification |
-| Mobile performance (simulator) | Medium | Optimize for desktop first, provide code-only mobile view |
-| Video embedding issues (geo-restrictions) | Low | Document alternative video sources, allow custom URLs |
-| Backend downtime | Medium | Implement localStorage fallback, service monitoring |
+| Risk                                      | Impact | Mitigation                                                |
+| ----------------------------------------- | ------ | --------------------------------------------------------- |
+| Wokwi API limitations (free tier)         | Medium | Cache simulation results, implement quota monitoring      |
+| MongoDB Atlas free tier limits            | Low    | Monitor usage, plan for upgrade path                      |
+| Complex markdown parsing                  | Medium | Extensive testing, manual JSON verification               |
+| Mobile performance (simulator)            | Medium | Optimize for desktop first, provide code-only mobile view |
+| Video embedding issues (geo-restrictions) | Low    | Document alternative video sources, allow custom URLs     |
+| Backend downtime                          | Medium | Implement localStorage fallback, service monitoring       |
 
 ---
 
