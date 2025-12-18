@@ -3,6 +3,13 @@
 ## Project Overview
 Transform the 30-day Arduino Markdown-based course into a fully interactive web learning platform with code editors, simulators, progress tracking, and embedded media.
 
+## TODO
+- [ ] Finalize frontend-backend API client config (dev/prod base URLs).
+- [ ] Wire AuthContext and ProgressContext to backend endpoints.
+- [ ] Connect quiz/activity/code/video components to save progress.
+- [ ] Add loading, error, and offline fallback handling.
+- [ ] Smoke-test auth + progress flows end-to-end.
+
 ## Technology Stack (Based on User Preferences)
 
 ### Frontend
@@ -795,4 +802,3 @@ AndruinoBeginner/
 - All lesson content (MD files) remains unchanged - JSON is generated from source
 - Git workflow enables easy updates without touching code
 - Deployment to free tiers (Vercel, Railway, MongoDB Atlas) keeps costs minimal
-
