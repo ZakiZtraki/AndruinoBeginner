@@ -1,0 +1,19 @@
+## Educator Review – Day 29: Reliability & Debugging
+
+This lesson does a good job of demystifying reliability issues and showing how to prevent them. It integrates hardware fixes like decoupling capacitors with software safeguards like watchdogs. Below are my comments and whether they were addressed.
+
+| Comment | Status |
+| --- | --- |
+| **Emphasise that brownouts are usually a hardware issue rather than a software one.** Explain that the ESP32 brownout detector resets the chip when the supply voltage dips below a threshold and that the real fix is a stable power supply and adequate decoupling【755226503047356†L56-L67】【755226503047356†L90-L104】. | *Addressed.* The introduction and power section explain what causes brownouts and recommend a regulated 5 V 2 A supply and bulk capacitors to prevent them. |
+| **Provide concrete capacitor values and placement guidelines.** Learners often don’t know which capacitor to use or where to place it. | *Addressed.* The lesson recommends 0.1 µF ceramic capacitors near each IC【165607811622794†L333-L339】 and a 470 µF electrolytic capacitor for the ESP32 supply【755226503047356†L98-L104】 and emphasises placement close to power pins【165607811622794†L372-L379】. |
+| **Explain the difference between decoupling and bulk capacitors.** Some readers confuse these terms. | *Partially addressed.* The lesson differentiates high‑frequency (0.1 µF) and low‑frequency (1–100 µF) decoupling【165607811622794†L333-L339】【165607811622794†L434-L435】. It could further clarify that large electrolytics provide energy storage rather than filtering. |
+| **Cover watchdog timers on both Arduino and ESP32.** Show how to enable and feed the watchdog on Arduino and mention that the ESP32 automatically enables its watchdogs【576069459775266†L116-L126】【300798514985521†L96-L100】. | *Addressed.* The lesson provides code to enable a 4‑second watchdog on Arduino and explains the built‑in watchdogs on the ESP32. |
+| **Warn about disabling watchdogs or brownout detectors.** Beginners sometimes disable these features to get rid of resets without fixing the root cause. | *Addressed.* The lesson advises not to disable the brownout detector and to fix power issues instead【755226503047356†L64-L113】. |
+| **Encourage systematic debugging.** Suggest logging, using oscilloscopes or logic analysers, and keeping a troubleshooting log. | *Addressed.* Section 3 mentions serial logging, filtering, grounding and test procedures, and the extensions suggest using logic analysers and asynchronous servers. |
+| **Offer more examples of filters and smoothing algorithms.** A basic moving average is given; consider adding median filters or debounce algorithms. | *Not addressed.* For brevity the lesson only outlines moving average and exponential smoothing. More advanced filters could be introduced in future expansions. |
+| **Provide a circuit diagram.** A schematic would help visual learners understand capacitor placement and wiring. | *Not addressed.* A diagram is noted as a future improvement; the lesson uses text instructions only. |
+| **Note that disabling interrupts or using long blocking delays can trip the ESP32’s interrupt watchdog.** | *Addressed.* The lesson mentions that long ISRs or blocking code can trigger the ESP32’s watchdog【300798514985521†L136-L155】. |
+
+### Summary
+
+Overall, the Day 29 lesson thoughtfully addresses reliability and debugging. It links hardware fixes to software strategies and gives learners a practical activity to practise what they’ve learned. Future iterations could add schematics and explore more advanced filtering and error‑handling techniques.

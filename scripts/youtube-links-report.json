@@ -1,0 +1,37 @@
+[
+  {
+    "dayId": "day01",
+    "lessonPath": "C:\\Users\\vlbir\\OneDrive\\source\\AndruinoBeginner\\content\\lessons\\day01\\lesson.md",
+    "videoCount": 2,
+    "videos": [
+      {
+        "lineNumber": 24,
+        "title": "Video link",
+        "url": "https://www.youtube.com/watch?v=ZBD3x6-MgiA",
+        "videoId": "ZBD3x6-MgiA",
+        "embedUrl": "https://www.youtube.com/embed/ZBD3x6-MgiA",
+        "watchUrl": "https://www.youtube.com/watch?v=ZBD3x6-MgiA",
+        "searchAlternative": {
+          "query": "Arduino tutorial",
+          "youtubeUrl": "https://www.youtube.com/results?search_query=Arduino%20tutorial",
+          "googleUrl": "https://www.google.com/search?q=Arduino%20tutorial%20youtube"
+        },
+        "context": " ### Recommended video  To see a full unboxing, watch the *Unboxing the Official Arduino Starter Kit (2024)* video on YouTube. Watch minutes **0:00 – 3:00** to follow along with the unpacking and comp"
+      },
+      {
+        "lineNumber": 61,
+        "title": "Video link",
+        "url": "https://www.youtube.com/watch?v=Z8KpPb6O654",
+        "videoId": "Z8KpPb6O654",
+        "embedUrl": "https://www.youtube.com/embed/Z8KpPb6O654",
+        "watchUrl": "https://www.youtube.com/watch?v=Z8KpPb6O654",
+        "searchAlternative": {
+          "query": "Arduino tutorial tutorial",
+          "youtubeUrl": "https://www.youtube.com/results?search_query=Arduino%20tutorial%20tutorial",
+          "googleUrl": "https://www.google.com/search?q=Arduino%20tutorial%20tutorial%20youtube"
+        },
+        "context": " ### Recommended video  Watch the first **0:00 – 1:00** of *Arduino Uno tutorial: Basic microcontroller overview* (eTech Tom, 2014). The first minute introduces the board’s major components. [Video li"
+      }
+    ]
+  }
+]

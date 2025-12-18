@@ -1,0 +1,20 @@
+# Day 6 Lesson Review (Educator Feedback)
+
+## Review summary
+
+This lesson does a great job of building on Day 5 by introducing two new sensors and applying analog‑to‑digital concepts in a practical way.  The objectives are clearly stated, the wiring instructions are step‑by‑step, and the sketches are accompanied by thoughtful explanations and troubleshooting tips.  I appreciate the safety warnings for testing the flame sensor and the inclusion of creative extension projects.  The lesson also makes good use of citations to support technical statements.
+
+## Comments and recommendations
+
+| ID | Section | Comment / Suggestion | Status |
+|---|---|---|---|
+| **C1** | Voltage divider explanation | Include a simple schematic or diagram showing the photoresistor and 10 kΩ resistor forming a voltage divider.  A visual cue helps beginners understand how the two components interact. | **Not addressed** – The lesson verbally describes the voltage divider but does not include a circuit diagram.  Consider adding a simple schematic in future revisions or linking to an external diagram. |
+| **C2** | LED wiring | Remind students which leg of the LED is the anode and which is the cathode, and that the resistor must connect to the cathode side.  Novices often get the LED orientation wrong. | **Addressed** – Step 2 states that the long leg (anode) goes to pin 9 and the short leg (cathode) goes through the resistor to GND【773904459634521†L256-L267】. |
+| **C3** | Mapping and calibration | Emphasise that the `map()` parameters may need adjustment because LDRs rarely span the full 0–1023 range.  Suggest a process for finding `min` and `max` values (e.g. by printing readings in different lighting conditions) and explain how to update the `map()` call accordingly. | **Addressed** – The code comment explains that you can adjust the mapping range and the optional calibration section discusses recording low and high values to rescale the sensor output【773904459634521†L310-L324】. |
+| **C4** | Flame sensor threshold | Provide guidance on determining whether the digital output is **HIGH** or **LOW** when a flame is detected, as different modules may invert the signal.  Suggest printing the digital value in the Serial Monitor while adjusting the potentiometer. | **Addressed** – The wiring section notes that some modules output LOW when triggered and that you should test yours to confirm【697309681949760†L70-L80】.  The sample code uses this logic and includes a serial printout to display the status. |
+| **C5** | Safety note | Expand the safety note to emphasise fire safety: keep a fire extinguisher nearby, avoid flammable liquids, and never leave an open flame unattended. | **Addressed** – The updated safety note now advises using only a single candle, keeping flammable materials away, not leaving an open flame unattended, and having a fire extinguisher or water nearby.  It also cautions against flammable liquids. |
+| **C6** | External resources | Recommend an external video or article demonstrating the flame sensor and photoresistor circuits.  Provide specific timestamps (e.g. “watch minutes 2:00–4:30”) so students know where to focus. | **Not addressed** – The lesson mentions the SparkFun experiment as a reference but doesn’t link to videos or specify viewing segments. |
+
+## Overall assessment
+
+The lesson provides a solid introduction to light and flame sensors and integrates analog and digital concepts effectively.  Most core concepts are covered and tied back to previous lessons.  The main areas for improvement are adding visual aids (e.g. a circuit schematic), expanding safety instructions when working with flames, and pointing learners to curated external resources with specific timestamps for further study.  Addressing these items will make the lesson even more engaging and safer for beginners.

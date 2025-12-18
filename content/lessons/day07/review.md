@@ -1,0 +1,20 @@
+# Day 7 Lesson Review (Educator Feedback)
+
+## Review summary
+
+This lesson successfully wraps up the first week by integrating multiple concepts—analog sensing, PWM output, digital inputs and state machines—into a single project.  The introduction sets clear goals, the wiring instructions are detailed and broken into logical steps, and the code example is well‑structured with comments explaining each part.  The explanation of state change detection and mode toggling helps students understand why certain programming patterns are used instead of simpler `if` statements.  Troubleshooting tips and extension ideas encourage experimentation and application of previous lessons.
+
+## Comments and recommendations
+
+| ID | Section | Comment / Suggestion | Status |
+|---|---|---|---|
+| **C1** | Circuit diagrams | As with earlier lessons, a simple schematic or Fritzing diagram would help visual learners see how the button, photoresistor and LED are connected.  Consider including or linking to a visual circuit diagram for this combined project. | **Not addressed** – The lesson describes wiring textually but does not include a circuit schematic.  Providing a visual aid could prevent wiring mistakes. |
+| **C2** | Pull‑down vs pull‑up explanation | Clarify that using `INPUT_PULLUP` inverts the logic: the default state reads HIGH and the button pulls it LOW【34446337895448†L286-L290】.  Remind students to invert their conditions (`LOW` vs `HIGH`) if they use the internal pull‑up. | **Addressed** – The lesson explains the difference between external pull‑down and built‑in pull‑up and notes how the logic would change【34446337895448†L286-L290】. |
+| **C3** | Manual mode toggle logic | Ensure that `ledState` toggles correctly in manual mode.  Initially the code did not update `ledState`, causing the LED to stay off.  The revised code now toggles `ledState` on button release in manual mode.  Remind students that state variables must be persistent (global or `static`) across loop iterations. | **Addressed** – The final code introduces `ledState` as a global boolean and toggles it when the button is released in manual mode.  It also explains the logic behind this state machine. |
+| **C4** | Debouncing | Although a short delay (`delay(20)`) is used, mention that more robust debouncing techniques (e.g. software timers or state machines) are available.  Point students back to Day 3’s debouncing lesson for details. | **Addressed** – The code includes a small delay to reduce bounce and the troubleshooting section references prior lessons for handling bouncing more robustly. |
+| **C5** | Safety and sensor integration | When suggesting the extension that combines a flame sensor, remind learners to separate high‑current devices (like buzzers or motors) from sensitive inputs and to follow the fire safety guidelines emphasised in Day 6. | **Partially addressed** – The extension mentions overriding the LED when a flame is detected【697309681949760†L70-L80】, but it could reiterate the safety precautions and power considerations. |
+| **C6** | External resources | Provide at least one curated video or article that demonstrates combining sensors and buttons to build a smart night‑light.  Suggest specific timestamps for relevant sections. | **Not addressed** – No external videos or articles are referenced in this lesson.  Including them would enrich the learning experience. |
+
+## Overall assessment
+
+This lesson is comprehensive and teaches an important pattern for handling multiple inputs and modes on a microcontroller.  The integrated project consolidates the week’s skills and prepares students for more complex builds in upcoming lessons.  To further improve the lesson, consider adding a circuit diagram, expanding on safety considerations when combining sensors, and linking to external multimedia resources.  These additions would support different learning styles and reinforce best practices.

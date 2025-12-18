@@ -1,0 +1,23 @@
+## Educator review for Day 16 – 16×2 Character LCD Display
+
+As an electronics instructor, I reviewed the Day 16 lesson and identified areas for improvement.  Each comment targets a specific phrase or concept using a simple regular expression pattern.  After each suggestion you’ll see whether the point was **addressed** in the final lesson or remains **unresolved** for future iterations.
+
+| Pattern to match | Comment & suggested improvement | Status |
+|---|---|---|
+| `16×2.*character` | Excellent introduction to the LCD’s features and pixel structure.  Consider adding a short note that the HD44780 uses its own instruction set, so other microcontrollers without the LiquidCrystal library will need custom code. | **Addressed** – The introduction mentions the HD44780 controller and its role in handling the low‑level timing. |
+| `contrast` | The wiring section covers the contrast potentiometer clearly.  It could be useful to remind learners to adjust the pot **only while the display is powered**, and to start with the wiper at mid‑range so the rectangles appear immediately. | **Addressed** – The wiring instructions explain how to adjust the potentiometer after powering up and describe the visual cue of seeing rectangles. |
+| `220 Ω` | Good job explaining when a backlight resistor is needed.  It might be helpful to mention that some LCD modules label the backlight pins “A” and “K” and that reversing them will prevent the backlight from turning on. | **Unresolved** – The lesson identifies pins 15 (A) and 16 (K) but doesn’t explicitly warn about reversing them; this can be added later. |
+| `4‑bit` | The explanation of 4‑bit vs 8‑bit modes is clear.  For curious students, suggest an experiment: implement the same “Hello world” example in 8‑bit mode and measure whether there’s a perceptible difference in speed. | **Unresolved** – The lesson notes the trade‑off but doesn’t include an 8‑bit experiment.  This could be a stretch challenge. |
+| `LiquidCrystal lcd` | The example code is easy to follow.  Consider showing how to change the pin assignments when students wire their display differently, and introduce the I²C library for backpack modules. | **Addressed** – The explanation section notes that the pin numbers in the constructor should match the wiring and briefly discusses I²C backpacks in the extensions. |
+| `scrollDisplayLeft` | Nice inclusion of scrolling.  You might add a challenge asking students to implement a marquee that scrolls back and forth (left and right) rather than in one direction only. | **Unresolved** – Only basic left scrolling is described; bi‑directional scrolling is left as an exercise. |
+| `Env Monitor` | The project is a great way to integrate previous lessons.  To avoid flicker, suggest updating only changed characters or using `lcd.setCursor()` before each print.  Also mention that the degree symbol (°) can be printed with `lcd.write(0xDF)` for clarity. | **Unresolved** – The code prints the ° symbol as `(char)223`, which works but isn’t explained; partial optimisation (updating only changed characters) is not discussed. |
+| `Troubleshooting` | Good checklist.  Include a reminder that in noisy environments, adding a small **100 nF capacitor** across the LCD’s power pins can help stabilise the display. | **Unresolved** – The troubleshooting section does not mention decoupling the LCD itself; this tip could improve reliability. |
+| `custom` | While the lesson hints at custom characters, it doesn’t show how to create them.  Encourage students to design one (e.g., a thermometer icon) using `lcd.createChar()` and display it alongside the readings. | **Unresolved** – Custom character creation is suggested but not demonstrated; a future revision could include an example. |
+| `I²C` | Introducing I²C backpacks is forward‑looking.  Provide a link to a specific guide or mention that the LiquidCrystal_I2C library uses the same API, which makes conversion easy. | **Addressed** – The lesson notes that I²C uses a backpack and references the LiquidCrystal_I2C library, though it doesn’t link to a specific guide. |
+
+### Summary of changes following review
+
+- Clarified that the HD44780 controller handles low‑level timing, addressing microcontroller requirements.
+- Detailed the contrast adjustment process and emphasised powering the display before tuning.
+- Discussed I²C backpacks as a way to reduce wiring and noted that the LiquidCrystal object pins must match the wiring.
+- Left several advanced topics (8‑bit mode experiments, bi‑directional scrolling, degree symbol explanation, decoupling capacitors, custom characters) for future iterations to encourage exploration.

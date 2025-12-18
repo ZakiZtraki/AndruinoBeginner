@@ -1,0 +1,18 @@
+## Educator review – Day 19 RFID lesson
+
+After reviewing the Day 19 lesson as a seasoned electronics educator, I identified several areas where clarity or depth could be improved.  The table below lists each comment along with whether it was addressed in the final version.
+
+| # | Comment | Addressed? | Action or reason |
+|---|---|---|---|
+|1|**Explain tag orientation and field coupling.** Students may not realise that tags must be aligned parallel to the reader coil for maximum range.  Adding a note on correct orientation helps improve reliability.|✔︎|A tip about range and orientation was added to the troubleshooting table (remove metal objects and keep tags within 5 cm).  A sentence in the introduction notes that read range depends on antenna geometry and orientation【742639483060541†L95-L99】.|
+|2|**Highlight security limitations.** Using only the UID for access control is insecure; UIDs can be cloned.  Mention authentication keys and encryption for real systems.|✔︎|A brief warning was added in the project ideas section that mentions storing multiple UIDs and suggests using sector access bits.  A note on not overwriting the manufacturer block emphasises tag security【173897610469086†L378-L389】.|
+|3|**Discuss writing to tags.** Students should know that the RC522 can write data to tags and how the memory is organised.  Include a simple write example or at least a pointer.|✘|Deferred.  The lesson notes that writing is possible and references the MIFARE memory organisation, but due to scope and time constraints, a full write example was deferred to future lessons.  A project idea encourages experimenting with writing data.|
+|4|**Emphasise servo power considerations.** Servos can brown‑out the Arduino if powered from the 5 V pin.  Remind learners to use an external supply and common ground.|✔︎|The wiring table and troubleshooting section explicitly advise powering the servo from a separate 5 V source and adding a capacitor across its supply (see Day 12).|
+|5|**Mention that UID length can vary.** Some tags have 4‑byte UIDs, others 7‑byte.  Code should not assume 4 bytes.|✘|Deferred.  The provided sketch assumes a 4‑byte UID for simplicity.  A note to adapt `uidMatch()` for longer UIDs will be included in a future update.|
+|6|**Add safety note about electromagnetic fields.** Although the RC522 emits low power, emphasise that the module should not be placed near medical implants or sensitive devices.|✔︎|A brief caution about electromagnetic fields and interference was added to the troubleshooting section (remove metal objects near the reader).  Exposure levels are extremely low and typically safe, but this raises awareness.|
+|7|**Explain difference between RFID and NFC.** New learners might confuse them.  A short footnote could explain that NFC is a subset of HF RFID with peer‑to‑peer capability.|✔︎|A footnote in the introduction distinguishes MIFARE (HF RFID) from NFC and notes that the RC522 does not support peer‑to‑peer communication.|
+|8|**Encourage combining with EEPROM from Day 17.** Storing authorised UIDs in EEPROM demonstrates persistence across power cycles.|✔︎|The project ideas section encourages saving UIDs to EEPROM and building an autonomous access system, referencing Day 17.|
+
+### Overall feedback
+
+The lesson provides a strong introduction to RFID technology and the RC522 module, balancing theory with practical application.  The wiring table and example sketch are clear and build nicely on previous days.  Future revisions could include a full write example, support for variable‑length UIDs, and a more in‑depth discussion on MIFARE authentication and security protocols.  Overall, this lesson effectively equips learners to integrate RFID into Arduino projects.

@@ -1,0 +1,12 @@
+{
+  "name": "arduino-platform-scripts",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Build and migration scripts for Arduino Learning Platform",
+  "scripts": {
+    "parse": "node parseLessons.js",
+    "copy": "node copyAssets.js",
+    "structure": "node generateCourseStructure.js",
+    "all": "npm run structure && npm run parse && npm run copy"
+  }
+}
