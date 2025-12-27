@@ -1,6 +1,6 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useCallback } from 'react';
 import { progressAPI } from '../utils/api';
-import { useAuth } from './AuthContext';
+import { useAuth } from '../hooks/useAuth';
 
 const ProgressContext = createContext(null);
 
@@ -10,18 +10,11 @@ export function ProgressProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Load all progress data when user logs in
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      loadUserProgress();
-    } else {
-      // Clear progress when logged out
-      setProgressData({});
-      setLoading(false);
+  const loadUserProgress = useCallback(async () => {
+    if (!user?.id) {
+      return;
     }
-  }, [isAuthenticated, user]);
 
-  const loadUserProgress = async () => {
     try {
       setLoading(true);
       setError(null);
@@ -29,7 +22,6 @@ export function ProgressProvider({ children }) {
       const response = await progressAPI.getUserProgress(user.id);
 
       if (response.success && response.data) {
-        // Transform array of progress records into object keyed by lessonId
         const progressMap = {};
         response.data.forEach(record => {
           progressMap[record.lessonId] = {
@@ -50,15 +42,33 @@ export function ProgressProvider({ children }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      loadUserProgress();
+    } else {
+      setProgressData({});
+      setLoading(false);
+    }
+  }, [isAuthenticated, user, loadUserProgress]);
 
   const getLessonProgress = (lessonId) => {
-    return progressData[lessonId] || {
+    const defaultProgress = {
       completedActivities: [],
       quizScores: [],
       watchedVideos: [],
       codeSnapshots: [],
       isCompleted: false,
+    };
+
+    if (!progressData[lessonId]) {
+      return defaultProgress;
+    }
+
+    return {
+      ...defaultProgress,
+      ...progressData[lessonId],
     };
   };
 
@@ -256,26 +266,6 @@ export function ProgressProvider({ children }) {
   };
 
   return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>;
-}
-
-export function useProgress(lessonId) {
-  const context = useContext(ProgressContext);
-  if (!context) {
-    throw new Error('useProgress must be used within a ProgressProvider');
-  }
-
-  // Return lesson-specific helpers
-  return {
-    progress: context.getLessonProgress(lessonId),
-    completeActivity: (activityId) => context.completeActivity(lessonId, activityId),
-    submitQuiz: (quizId, answers) => context.submitQuiz(lessonId, quizId, answers),
-    watchVideo: (videoUrl) => context.watchVideo(lessonId, videoUrl),
-    saveCode: (code, editorId) => context.saveCode(lessonId, code, editorId),
-    markComplete: () => context.markLessonComplete(lessonId),
-    completionPercentage: context.getCompletionPercentage(lessonId),
-    loading: context.loading,
-    error: context.error,
-  };
 }
 
 export default ProgressContext;

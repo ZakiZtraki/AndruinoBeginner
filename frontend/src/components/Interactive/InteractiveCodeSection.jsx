@@ -3,7 +3,6 @@ import CodeEditor from './CodeEditor';
 import WokwiSimulator from './WokwiSimulator';
 
 function InteractiveCodeSection({ code, language = 'cpp', explanation, showSimulator = true }) {
-  const [currentCode, setCurrentCode] = useState(code);
   const [showSimulatorPanel, setShowSimulatorPanel] = useState(false);
   const [simulatorCode, setSimulatorCode] = useState(code);
 
@@ -55,7 +54,7 @@ function InteractiveCodeSection({ code, language = 'cpp', explanation, showSimul
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <span>
-              Click <strong>"Run Code"</strong> to test this Arduino sketch in the virtual simulator.
+              Click <strong>&ldquo;Run Code&rdquo;</strong> to test this Arduino sketch in the virtual simulator.
               You can modify the code and run it again to see different results.
             </span>
           </p>

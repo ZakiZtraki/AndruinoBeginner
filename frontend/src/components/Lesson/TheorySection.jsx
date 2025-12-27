@@ -13,51 +13,51 @@ function TheorySection({ title, content, citations }) {
           remarkPlugins={[remarkGfm]}
           components={{
             // Custom styling for markdown elements
-            h3: ({ node, ...props }) => (
+            h3: (props) => (
               <h3 className="text-xl font-semibold text-gray-800 mt-6 mb-3" {...props} />
             ),
-            h4: ({ node, ...props }) => (
+            h4: (props) => (
               <h4 className="text-lg font-semibold text-gray-800 mt-4 mb-2" {...props} />
             ),
-            p: ({ node, ...props }) => (
+            p: (props) => (
               <p className="text-gray-700 leading-relaxed mb-4" {...props} />
             ),
-            ul: ({ node, ...props }) => (
+            ul: (props) => (
               <ul className="list-disc list-inside space-y-2 mb-4 text-gray-700" {...props} />
             ),
-            ol: ({ node, ...props }) => (
+            ol: (props) => (
               <ol className="list-decimal list-inside space-y-2 mb-4 text-gray-700" {...props} />
             ),
-            li: ({ node, ...props }) => (
+            li: (props) => (
               <li className="ml-4" {...props} />
             ),
-            blockquote: ({ node, ...props }) => (
+            blockquote: (props) => (
               <blockquote className="border-l-4 border-gray-300 pl-4 py-2 my-4 italic text-gray-600 bg-gray-50 rounded-r" {...props} />
             ),
-            code: ({ node, inline, ...props }) =>
+            code: ({ inline, ...props }) =>
               inline ? (
                 <code className="bg-gray-100 text-red-600 px-1.5 py-0.5 rounded text-sm font-mono" {...props} />
               ) : (
                 <code className="block bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm font-mono" {...props} />
               ),
-            strong: ({ node, ...props }) => (
+            strong: (props) => (
               <strong className="font-semibold text-gray-900" {...props} />
             ),
-            a: ({ node, ...props }) => (
+            a: (props) => (
               <a className="text-blue-600 hover:text-blue-800 hover:underline" {...props} />
             ),
-            img: ({ node, ...props }) => (
+            img: (props) => (
               <img className="rounded-lg shadow-md my-6 max-w-full h-auto" {...props} />
             ),
-            table: ({ node, ...props }) => (
+            table: (props) => (
               <div className="overflow-x-auto my-6">
                 <table className="min-w-full border border-gray-200 rounded-lg" {...props} />
               </div>
             ),
-            th: ({ node, ...props }) => (
+            th: (props) => (
               <th className="bg-gray-100 px-4 py-2 text-left font-semibold text-gray-700 border-b" {...props} />
             ),
-            td: ({ node, ...props }) => (
+            td: (props) => (
               <td className="px-4 py-2 border-b text-gray-700" {...props} />
             ),
           }}

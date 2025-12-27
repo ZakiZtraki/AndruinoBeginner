@@ -1,4 +1,4 @@
-function ActivityPrompt({ prompt, id }) {
+function ActivityPrompt({ prompt }) {
   return (
     <div className="mb-8 bg-gradient-to-r from-green-50 to-teal-50 border-l-4 border-green-500 p-6 rounded-r-lg">
       <div className="flex items-start">

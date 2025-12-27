@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function Quiz({ questions, quizId, onComplete }) {
+function Quiz({ questions, onComplete }) {
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [showResults, setShowResults] = useState(false);

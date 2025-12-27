@@ -6,7 +6,7 @@ import InteractiveCodeSection from '../Interactive/InteractiveCodeSection';
 import ActivityPrompt from '../Interactive/ActivityPrompt';
 import VideoEmbed from '../Interactive/VideoEmbed';
 import Quiz from '../Interactive/Quiz';
-import { useProgress } from '../../contexts/ProgressContext';
+import { useProgress } from '../../hooks/useProgress';
 
 function LessonContent({ lesson }) {
   const { submitQuiz, watchVideo } = useProgress(lesson?.id);

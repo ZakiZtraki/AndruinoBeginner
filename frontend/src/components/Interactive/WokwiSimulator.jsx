@@ -1,36 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 function WokwiSimulator({ code, board = 'arduino-uno' }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const iframeRef = useRef(null);
-
-  // Create Wokwi project configuration
-  const createWokwiProject = () => {
-    // Wokwi uses a specific format for embedded projects
-    // For now, we'll use the simple embed approach
-    const projectData = {
-      version: 1,
-      author: 'Arduino Learning Platform',
-      editor: 'wokwi',
-      parts: [
-        { type: 'wokwi-arduino-uno', id: 'uno', top: 0, left: 0 }
-      ],
-      connections: [],
-      dependencies: {}
-    };
-
-    return projectData;
-  };
-
-  // Generate Wokwi embed URL
-  const getWokwiEmbedUrl = () => {
-    // For a basic Arduino project, we can use Wokwi's embed feature
-    // Note: In production, you'd want to create actual Wokwi projects via their API
-    // For now, we'll use a demo project URL
-    const baseUrl = 'https://wokwi.com/projects/new/arduino-uno';
-    return baseUrl;
-  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -89,8 +61,8 @@ function WokwiSimulator({ code, board = 'arduino-uno' }) {
           </div>
           <h4 className="text-xl font-semibold text-gray-700 mb-2">Wokwi Simulator</h4>
           <p className="text-gray-600 mb-4 max-w-md">
-            Click "Run Code" in the editor above to load your Arduino sketch into the Wokwi simulator.
-            You'll see a virtual Arduino board with LEDs, sensors, and serial monitor.
+            Click &ldquo;Run Code&rdquo; in the editor above to load your Arduino sketch into the Wokwi simulator.
+            You&rsquo;ll see a virtual Arduino board with LEDs, sensors, and serial monitor.
           </p>
           <a
             href="https://wokwi.com/projects/new/arduino-uno"
@@ -108,16 +80,6 @@ function WokwiSimulator({ code, board = 'arduino-uno' }) {
           </p>
         </div>
 
-        {/* Future: Actual Wokwi iframe will go here */}
-        {/* <iframe
-          ref={iframeRef}
-          src={getWokwiEmbedUrl()}
-          width="100%"
-          height="100%"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
-          title="Wokwi Arduino Simulator"
-        /> */}
       </div>
 
       <div className="mt-3 text-sm text-gray-600">
