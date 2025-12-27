@@ -6,8 +6,8 @@ In the previous lesson you learned how to use the ESP32’s GPIO pins.  Today yo
 
 By the end of this lesson you will be able to:
 
-1. Connect an ESP32 to a Wi‑Fi network using `WiFi.begin()` and wait for a successful connection【384423720218434†L252-L266】.
-2. Create an HTTP server with the `WebServer` class, define request handlers and start listening on port 80【384423720218434†L267-L276】.
+1. Connect an ESP32 to a Wi‑Fi network using `WiFi.begin()` and wait for a successful connection.
+2. Create an HTTP server with the `WebServer` class, define request handlers and start listening on port 80.
 3. Serve a basic HTML page and update it with sensor readings and button states.
 4. Control an LED via URL commands (e.g., `/led/on` and `/led/off`).
 5. Understand the difference between station and access‑point modes.
@@ -23,11 +23,13 @@ By the end of this lesson you will be able to:
 
 The ESP32 can operate in three Wi‑Fi modes:
 
-- **Station (STA) mode** – the ESP32 connects to your existing router like a phone or laptop【384423720218434†L155-L160】.
+- **Station (STA) mode** – the ESP32 connects to your existing router like a phone or laptop.
 - **Access Point (AP) mode** – the ESP32 creates its own Wi‑Fi network and acts as a hotspot.  This is useful when there is no router available.
-- **Dual (AP+STA) mode** – the ESP32 can act as an access point while also connecting to another network【384423720218434†L145-L152】.
+- **Dual (AP+STA) mode** – the ESP32 can act as an access point while also connecting to another network.
 
 In this lesson we’ll use **station mode**, which allows any device on your local network to access the ESP32’s web page through its IP address.
+
+Source: [Arduino‑ESP32 WiFi class](https://docs.espressif.com/projects/arduino-esp32/en/latest/api/wifi.html).
 
 ## 2. Connecting to Wi‑Fi
 
@@ -46,9 +48,8 @@ void setup() {
   Serial.begin(115200);
   delay(100);
 
-  Serial.print("Connecting to \"\");
-  Serial.print(ssid);
-  Serial.println("\" ...");
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
 
   // Connect to Wi-Fi network
   WiFi.begin(ssid, password);                   // start connection
@@ -59,7 +60,7 @@ void setup() {
   Serial.println();
   Serial.println("WiFi connected..!");
   Serial.print("Got IP: ");
-  Serial.println(WiFi.localIP());               // print the assigned IP【384423720218434†L252-L266】
+  Serial.println(WiFi.localIP());               // print the assigned IP
 
   // Define request handlers (we’ll create these functions later)
   server.on("/", handleRoot);
@@ -67,12 +68,14 @@ void setup() {
   server.on("/led/off", handleLedOff);
   server.onNotFound(handleNotFound);
   
-  server.begin();                               // start the HTTP server【384423720218434†L267-L272】
+  server.begin();                               // start the HTTP server
   Serial.println("HTTP server started");
 }
 ```
 
-This code connects the ESP32 to your Wi‑Fi network using `WiFi.begin(ssid, password)` and waits until the status becomes `WL_CONNECTED`【384423720218434†L252-L266】.  It then prints the IP address assigned by your router using `WiFi.localIP()` and registers handlers for different URL paths (`/`, `/led/on`, `/led/off`).  The server listens on port 80【384423720218434†L267-L272】.
+This code connects the ESP32 to your Wi‑Fi network using `WiFi.begin(ssid, password)` and waits until the status becomes `WL_CONNECTED`.  It then prints the IP address assigned by your router using `WiFi.localIP()` and registers handlers for different URL paths (`/`, `/led/on`, `/led/off`).  The server listens on port 80.
+
+Source: [Arduino‑ESP32 WiFi class](https://docs.espressif.com/projects/arduino-esp32/en/latest/api/wifi.html), [Arduino‑ESP32 WebServer](https://docs.espressif.com/projects/arduino-esp32/en/latest/api/webserver.html).
 
 ## 3. Serving a web page
 
@@ -118,7 +121,7 @@ void setup() {
 }
 
 void loop() {
-  server.handleClient();  // process incoming HTTP requests【384423720218434†L274-L276】
+  server.handleClient();  // process incoming HTTP requests
 }
 ```
 
@@ -126,11 +129,11 @@ When you open the ESP32’s IP address in your browser, it serves a page with th
 
 ### Adding sensor data
 
-To display the DHT22’s temperature and humidity from Day 15, read the sensor in `handleRoot()` and insert the values into the HTML string.  Keep in mind that the DHT22 has a **slow sample rate (0.5 Hz)**—readings should be taken no more than once every 2 seconds【860589226677594†L98-L116】.  For faster sensors, like a photoresistor, you can update the values on each page load or use AJAX for dynamic updates.
+To display the DHT22’s temperature and humidity from Day 15, read the sensor in `handleRoot()` and insert the values into the HTML string.  Keep in mind that the DHT22 has a **slow sample rate (0.5 Hz)**—readings should be taken no more than once every 2 seconds ([Adafruit DHT guide](https://learn.adafruit.com/dht)).  For faster sensors, like a photoresistor, you can update the values on each page load or use AJAX for dynamic updates.
 
 ## 4. Access Point mode (optional)
 
-If your ESP32 needs to serve a page without an existing router (e.g., at a workshop), use **AP mode**.  In this mode, the ESP32 creates its own Wi‑Fi network with a configurable SSID and password.  Devices connect directly to it and access the web page.  Use `WiFi.softAP(ssid_AP, password_AP)` to start an access point and `WiFi.softAPIP()` to get its IP address.
+If your ESP32 needs to serve a page without an existing router (e.g., at a workshop), use **AP mode**.  In this mode, the ESP32 creates its own Wi‑Fi network with a configurable SSID and password.  Devices connect directly to it and access the web page.  Use `WiFi.softAP(ssid_AP, password_AP)` to start an access point and `WiFi.softAPIP()` to get its IP address ([Arduino‑ESP32 WiFi class](https://docs.espressif.com/projects/arduino-esp32/en/latest/api/wifi.html)).
 
 ## 5. Security considerations
 
@@ -140,11 +143,11 @@ While this example runs on a local network, it’s important to consider securit
 
 | Issue | Possible cause | Fix |
 |---|---|---|
-| The Serial Monitor shows `WL_CONNECT_FAILED` or never connects | Wrong SSID/password or router out of range | Double‑check your credentials and ensure the ESP32 is within Wi‑Fi coverage【384423720218434†L371-L385】. |
-| `server.handleClient()` returns nothing | Handlers not registered or server not started | Ensure `server.on()` and `server.begin()` are called in `setup()`【384423720218434†L267-L276】. |
+| The Serial Monitor shows `WL_CONNECT_FAILED` or never connects | Wrong SSID/password or router out of range | Double‑check your credentials and ensure the ESP32 is within Wi‑Fi coverage. |
+| `server.handleClient()` returns nothing | Handlers not registered or server not started | Ensure `server.on()` and `server.begin()` are called in `setup()`. |
 | Browser shows “Not found” | You typed an invalid URL | Use the exact paths defined (`/`, `/led/on`, `/led/off`); unknown paths trigger `handleNotFound()`. |
 | IP address changes after reboot | DHCP assigned a new address | Assign a static IP using `WiFi.config()` or use mDNS for name resolution. |
-| Page loads slowly or freezes sensor readings | Slow sensor sampling or blocking code | Read sensors less often (DHT22 ≤ 0.5 Hz)【860589226677594†L98-L116】; avoid `delay()` in handlers. |
+| Page loads slowly or freezes sensor readings | Slow sensor sampling or blocking code | Read sensors less often (DHT22 ≤ 0.5 Hz); avoid `delay()` in handlers ([Adafruit DHT guide](https://learn.adafruit.com/dht)). |
 
 ## 7. Going further
 
@@ -157,9 +160,9 @@ While this example runs on a local network, it’s important to consider securit
 ## Key takeaways
 
 * The ESP32 can serve dynamic web pages by operating as a web server in station or access‑point mode.
-* Use `WiFi.begin(ssid, password)` and wait for `WL_CONNECTED` to connect to your network【384423720218434†L252-L266】.
-* Create a `WebServer` object, register URL handlers, and call `server.handleClient()` in the loop【384423720218434†L267-L276】.
+* Use `WiFi.begin(ssid, password)` and wait for `WL_CONNECTED` to connect to your network.
+* Create a `WebServer` object, register URL handlers, and call `server.handleClient()` in the loop.
 * Serve HTML strings containing sensor readings and control links, and use URL paths to trigger actions like turning LEDs on or off.
-* Observe sensor sample rates (e.g., DHT22’s 0.5 Hz limit) to avoid blocking the server【860589226677594†L98-L116】.
+* Observe sensor sample rates (e.g., DHT22’s 0.5 Hz limit) to avoid blocking the server ([Adafruit DHT guide](https://learn.adafruit.com/dht)).
 
 In the next lesson, we will learn how to send sensor data to cloud services using MQTT.

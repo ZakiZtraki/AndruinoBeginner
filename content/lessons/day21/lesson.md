@@ -2,12 +2,12 @@
 
 Welcome to the first capstone project of this 30‑day DIY electronics series!  In this lesson you’ll combine many of the sensors, actuators and techniques you’ve learned to build an **autonomous environment monitor**.  The system will:
 
-- Measure **temperature and humidity** using a DHT22 sensor – more accurate and wide‑ranging than the DHT11 (–40 to 80 °C versus 0 to 50 °C and 0–100 % RH versus 20–80 % RH)【860589226677594†L98-L116】.
-- Detect **motion** with a PIR sensor and switch the display into an alert mode when someone approaches; the HC‑SR501 can detect up to ~21 feet and has adjustable sensitivity and delay【221133490407826†L219-L223】【221133490407826†L237-L240】.
-- Monitor **water level** (e.g. a sump or plant reservoir) using a resistive water‑level sensor.  The sensor’s analog voltage rises as more of its copper traces are submerged【760746864211831†L128-L153】; powering the sensor from a digital pin minimises corrosion【760746864211831†L187-L199】.
+- Measure **temperature and humidity** using a DHT22 sensor – wider‑ranging and more accurate than the DHT11 (DHT22: –40 to 80 °C and 0–100 % RH; DHT11: 0 to 50 °C and 20–90 % RH) ([DHT22 datasheet](https://cdn-shop.adafruit.com/datasheets/DHT22.pdf), [DHT11 datasheet](https://cdn-shop.adafruit.com/datasheets/DHT11-chinese.pdf)).
+- Detect **motion** with a PIR sensor and switch the display into an alert mode when someone approaches; the HC‑SR501 typically detects motion in the 3–7 m range and offers adjustable sensitivity and delay ([HC‑SR501 guide](https://www.makerguides.com/hc-sr501-arduino-tutorial/)).
+- Monitor **water level** (e.g. a sump or plant reservoir) using a resistive water‑level sensor.  The sensor’s analog voltage rises as more of its copper traces are submerged; powering the sensor from a digital pin minimises corrosion ([Grove Water Sensor](https://wiki.seeedstudio.com/Grove-Water_Sensor/), [Electrolysis](https://en.wikipedia.org/wiki/Electrolysis)).
 - Sound a **buzzer** or drive a **servo‑actuated vent** when thresholds are crossed.
-- **Display** real‑time data on a 16×2 LCD using the LiquidCrystal library.  The LCD’s pinout includes RS, EN and four data lines (D4–D7) with separate backlight power【438396019505213†L143-L184】; wiring it in 4‑bit mode saves Arduino pins【438396019505213†L230-L236】.
-- Save user‑set thresholds into **EEPROM**, so your settings persist across power cycles.  AVR microcontrollers have 1 KB of built‑in EEPROM and individual cells are rated for ~100 000 write cycles【264402201497082†L95-L100】【264402201497082†L84-L86】, so you must minimise writes.
+- **Display** real‑time data on a 16×2 LCD using the LiquidCrystal library.  The LCD’s pinout includes RS, EN and four data lines (D4–D7) with separate backlight power; wiring it in 4‑bit mode saves Arduino pins ([HD44780 datasheet](https://www.sparkfun.com/datasheets/LCD/HD44780.pdf), [LiquidCrystal reference](https://www.arduino.cc/en/Reference/LiquidCrystal)).
+- Save user‑set thresholds into **EEPROM**, so your settings persist across power cycles.  AVR microcontrollers like the ATmega328P include 1 KB of EEPROM and each cell is rated for about 100 000 write cycles ([ATmega328P datasheet](https://ww1.microchip.com/downloads/en/DeviceDoc/ATmega328P-Data-Sheet-DS-DS40002061B.pdf)).
 
 By the end of this project you will have integrated multiple inputs and outputs, managed state across reboots, and written modular code that scales.  Let’s get started!
 
@@ -26,18 +26,18 @@ If any of these topics feel unfamiliar, revisit the corresponding earlier lesson
 
 | Quantity | Component | Notes |
 |---|---|---|
-|1|Arduino Uno or compatible board|Provides 5 V logic and 6 analog inputs.|
-|1|DHT22 temperature/humidity sensor|Measures –40 to 80 °C and 0–100 % RH with ±0.5 °C/±2–5 % RH accuracy【860589226677594†L98-L116】.  If you only have a DHT11, it will work, but with reduced range.|
-|1|HC‑SR501 PIR motion sensor|Powered from 5 V; detection range adjustable via onboard potentiometer (≈ 9–21 ft) and delay adjustable from ~1 s to 3 min【221133490407826†L219-L223】【221133490407826†L237-L240】.|
-|1|Water‑level sensor module|Three‑pin analog sensor.  Provides rising voltage as water touches more traces【760746864211831†L128-L153】.  Power via a digital pin to reduce corrosion【760746864211831†L187-L199】.|
-|1|16×2 LCD (HD44780 compatible)|Requires 5 V; use 10 kΩ potentiometer for contrast and optional 220 Ω resistor for backlight【438396019505213†L143-L184】.  Pin mapping described below.|
-|1|Piezo buzzer (active or passive) **or** SG90 micro‑servo|Buzzer for audible alerts; servo to open/close a vent or lid.  The SG90 runs on 5 V and draws 100–250 mA when moving【335603732100712†L246-L249】.|
+|1|Arduino Uno or compatible board|Provides 5 V logic and 6 analog inputs ([Arduino Uno Rev3 tech specs](https://store.arduino.cc/products/arduino-uno-rev3)).|
+|1|DHT22 temperature/humidity sensor|If you only have a DHT11, it will work, but with reduced range ([DHT22 datasheet](https://cdn-shop.adafruit.com/datasheets/DHT22.pdf), [DHT11 datasheet](https://cdn-shop.adafruit.com/datasheets/DHT11-chinese.pdf)).|
+|1|HC‑SR501 PIR motion sensor|Powered from 5 V; detection range and delay are adjustable via onboard potentiometers ([HC‑SR501 guide](https://www.makerguides.com/hc-sr501-arduino-tutorial/)).|
+|1|Water‑level sensor module|Three‑pin analog sensor.  Provides rising voltage as water touches more traces ([Grove Water Sensor](https://wiki.seeedstudio.com/Grove-Water_Sensor/)).|
+|1|16×2 LCD (HD44780 compatible)|Requires 5 V; use 10 kΩ potentiometer for contrast and optional 220 Ω resistor for backlight ([HD44780 datasheet](https://www.sparkfun.com/datasheets/LCD/HD44780.pdf)).|
+|1|Piezo buzzer (active or passive) **or** SG90 micro‑servo|Buzzer for audible alerts; servo to open/close a vent or lid.  Use a separate 5 V supply if the servo causes resets ([Hobby servo guide](https://learn.sparkfun.com/tutorials/hobby-servo-tutorial/all)).|
 |1|RGB LED or simple LED|Visual status indicator.|
 |1|Button or switch|For entering threshold‑adjustment mode.|
 |1|10 kΩ potentiometer|For LCD contrast.|
-|3|10 kΩ resistors|Pull‑down resistor for button and voltage divider (if needed).|
+|1–2|10 kΩ resistors|DHT22 data pull‑up (if not on the breakout) and optional external pull‑up for the button.|
 |Wires, breadboard, and optional prototyping shield|—|
-|Power supply|If using servo, supply 5 V at ≥ 1 A (or use external supply).|
+|Power supply|If using a servo, power it from a separate 5 V supply and connect grounds.|
 
 ## System Overview
 
@@ -69,16 +69,16 @@ This smart monitor continuously samples the DHT sensor, water‑level sensor and
 1. **Power rails:** Connect the Arduino’s 5 V and GND to your breadboard’s power rails.
 2. **LCD:** Place the LCD on the breadboard.  Wire its pins as follows:
    - Pin 1 (GND) → Ground.  Pin 2 (VCC) → 5 V.
-   - Pin 3 (V0) → middle of 10 kΩ potentiometer; other ends of the pot go to 5 V and GND【438396019505213†L143-L184】.
-   - Pin 4 (RS) → Arduino D12; Pin 6 (E) → D11【438396019505213†L230-L236】.
-   - Pins 11–14 (D4–D7) → Arduino D5, D4, D3 and D2 respectively (4‑bit mode)【438396019505213†L230-L236】.
-   - Pin 5 (RW) → GND (we always write to the LCD【438396019505213†L166-L172】).
-   - Pin 15 (A/backlight +) → 5 V through a 220 Ω resistor (if your LCD lacks a built‑in resistor)【438396019505213†L198-L204】.  Pin 16 (K) → GND.
-3. **DHT22:** Connect VCC to 5 V, GND to GND and DATA to A1.  Insert a 10 kΩ resistor between DATA and VCC to act as the pull‑up (some breakout boards include this)【860589226677594†L98-L116】.
-4. **PIR sensor:** Connect its VCC to 5 V, GND to GND and OUT to D2.  Adjust its two potentiometers: turn sensitivity to half‑scale (~15 ft range) and set the delay to ~5 s for testing【221133490407826†L219-L223】【221133490407826†L237-L240】.  Wait 30–60 s after power up for the sensor to stabilise【352674793399350†L246-L249】.
-5. **Water‑level sensor:** Connect its signal pin to A0, GND to GND, and VCC to D7.  We will control D7 to power the sensor only during readings to reduce corrosion【760746864211831†L187-L199】.
-6. **Buzzer or servo:** If using a buzzer, connect one leg to D3 and the other leg to GND; if using a servo, connect the orange/yellow signal wire to D3, the red wire to 5 V and the brown/black wire to GND【335603732100712†L214-L237】.  Use a separate 5 V supply with a common ground if the servo causes resets【335603732100712†L246-L249】.
-7. **Button:** Connect one leg to D8 and the other leg to GND.  Connect a 10 kΩ resistor between D8 and 5 V (pull‑up).  When pressed, the pin reads LOW.
+   - Pin 3 (V0) → middle of 10 kΩ potentiometer; other ends of the pot go to 5 V and GND.
+   - Pin 4 (RS) → Arduino D12; Pin 6 (E) → D11.
+   - Pins 11–14 (D4–D7) → Arduino D5, D4, D3 and D2 respectively (4‑bit mode).
+   - Pin 5 (RW) → GND (we always write to the LCD).
+   - Pin 15 (A/backlight +) → 5 V through a 220 Ω resistor (if your LCD lacks a built‑in resistor).  Pin 16 (K) → GND.
+3. **DHT22:** Connect VCC to 5 V, GND to GND and DATA to A1.  Insert a 10 kΩ resistor between DATA and VCC to act as the pull‑up (some breakout boards include this) ([Adafruit DHT guide](https://learn.adafruit.com/dht)).
+4. **PIR sensor:** Connect its VCC to 5 V, GND to GND and OUT to D2.  Adjust sensitivity and delay with the onboard potentiometers.  Wait 30–60 s after power up for the sensor to stabilise ([HC‑SR501 guide](https://www.makerguides.com/hc-sr501-arduino-tutorial/), [Adafruit PIR guide](https://learn.adafruit.com/pir-passive-infrared-proximity-motion-sensor)).
+5. **Water‑level sensor:** Connect its signal pin to A0, GND to GND, and VCC to D7.  We will control D7 to power the sensor only during readings to reduce corrosion ([Electrolysis](https://en.wikipedia.org/wiki/Electrolysis)).
+6. **Buzzer or servo:** If using a buzzer, connect one leg to D3 and the other leg to GND; if using a servo, connect the orange/yellow signal wire to D3, the red wire to 5 V and the brown/black wire to GND.  Use a separate 5 V supply with a common ground if the servo causes resets.
+7. **Button:** Connect one leg to D8 and the other leg to GND.  We’ll use the internal pull‑up (`INPUT_PULLUP`), so the pin reads LOW when pressed.
 8. **Common grounds:** Ensure all sensors and actuators share a common ground with the Arduino.
 
 ### Verification Checkpoint
@@ -241,18 +241,18 @@ void saveThresholds() {
 }
 ```
 
-This code demonstrates one way to integrate multiple sensors and actuators.  It reads the water‑level sensor by powering it from a digital pin just long enough to take a reading【760746864211831†L187-L199】, updates the LCD, and triggers the alert output when thresholds or motion exceed set values.  The adjust‑mode uses the PIR sensor as a “plus” button; you could substitute a second button or potentiometer instead.  Notice how we call `EEPROM.put()` only when leaving adjust mode to minimise write cycles【264402201497082†L84-L86】.
+This code demonstrates one way to integrate multiple sensors and actuators.  It reads the water‑level sensor by powering it from a digital pin just long enough to take a reading, updates the LCD, and triggers the alert output when thresholds or motion exceed set values.  The adjust‑mode uses the PIR sensor as a “plus” button; you could substitute a second button or potentiometer instead.  Notice how we call `EEPROM.put()` only when leaving adjust mode to minimise write cycles.
 
 ### Common Mistakes and How to Avoid Them
 
 | Issue | Cause | Solution |
 |---|---|---|
-|LCD displays gibberish or nothing|Incorrect pin mapping or contrast misadjusted|Re‑check the wiring; connect RW to GND and adjust the contrast pot until boxes appear; ensure RS, EN and D4–D7 match your code【438396019505213†L143-L184】.|
-|DHT sensor returns `nan` values|Data line floating or sampling too fast|Ensure the 10 kΩ pull‑up resistor is installed【860589226677594†L98-L116】; wait at least 2 s between reads for DHT22 (0.5 Hz sampling rate)【860589226677594†L98-L116】.|
-|Water sensor corrodes quickly|Constant power applied|Power the sensor via a digital pin and turn it on only during readings【760746864211831†L187-L199】.  Keep only the sensing area submerged【760746864211831†L263-L265】.|
-|PIR sensor triggers randomly|No warm‑up time or interference|Wait 30–60 s after power‑up【352674793399350†L246-L249】; adjust sensitivity and delay; avoid pointing at heat sources or direct sunlight.|
-|Servo causes Arduino resets|Servo draws too much current|Provide a separate 5 V supply for the servo and join grounds【335603732100712†L246-L249】.  Do not power a servo directly from an Arduino pin.|
-|EEPROM wears out|Writing too often|Use `EEPROM.update()` or only write when thresholds change; avoid saving every loop iteration【264402201497082†L84-L86】.|
+|LCD displays gibberish or nothing|Incorrect pin mapping or contrast misadjusted|Re‑check the wiring; connect RW to GND and adjust the contrast pot until boxes appear; ensure RS, EN and D4–D7 match your code.|
+|DHT sensor returns `nan` values|Data line floating or sampling too fast|Ensure the 10 kΩ pull‑up resistor is installed; wait at least 2 s between reads for DHT22 (0.5 Hz sampling rate) ([Adafruit DHT guide](https://learn.adafruit.com/dht)).|
+|Water sensor corrodes quickly|Constant power applied|Power the sensor via a digital pin and turn it on only during readings.  Keep only the sensing area submerged.|
+|PIR sensor triggers randomly|No warm‑up time or interference|Wait 30–60 s after power‑up; adjust sensitivity and delay; avoid pointing at heat sources or direct sunlight ([Adafruit PIR guide](https://learn.adafruit.com/pir-passive-infrared-proximity-motion-sensor)).|
+|Servo causes Arduino resets|Servo draws too much current|Provide a separate 5 V supply for the servo and join grounds.  Do not power a servo directly from an Arduino pin ([Hobby servo guide](https://learn.sparkfun.com/tutorials/hobby-servo-tutorial/all)).|
+|EEPROM wears out|Writing too often|Use `EEPROM.update()` or only write when thresholds change; avoid saving every loop iteration ([EEPROM.update reference](https://www.arduino.cc/en/Reference/EEPROMUpdate)).|
 
 ## Going Further
 
@@ -261,18 +261,18 @@ Here are a few ideas to extend the project:
 * **Network your monitor.**  Use an ESP32 or ESP8266 board to send sensor data to a web dashboard.  The DHT sensor readings can be published over MQTT, and thresholds can be adjusted via a smartphone.
 * **Add more sensors.**  Integrate the RC522 RFID reader (Day 19) to log who acknowledges an alert, or add the accelerometer (Day 18) to detect vibration.
 * **Graph data.**  Store time‑stamped sensor values on an SD card or send them to a computer for plotting.  Use a rolling average to smooth water‑level readings and reduce noise.
-* **Automate actions.**  Attach the servo to open a greenhouse vent when temperature exceeds the set point and close it when it drops.  Combine with the rain sensor module: its comparator outputs LOW when the pad gets wet【568536163166220†L140-L144】, so you can override the vent to prevent rain entering.
+* **Automate actions.**  Attach the servo to open a greenhouse vent when temperature exceeds the set point and close it when it drops.  You can add a rain or moisture sensor to override the vent and keep water out.
 * **User interface improvements.**  Replace the button/PIR interface with a rotary encoder to adjust thresholds more easily, or add a menu system on the LCD using custom characters.
 
 ## Summary
 
 This capstone project integrates multiple sensors and output devices into a cohesive system.  You learned how to:
 
-* Compare the DHT11 and DHT22 sensors and choose the right one for a temperature and humidity monitor【860589226677594†L98-L116】.
-* Read a resistive water‑level sensor, power it efficiently and interpret its analog output【760746864211831†L128-L153】【760746864211831†L187-L199】.
-* Wire and operate a 16×2 LCD in 4‑bit mode, saving pins and controlling contrast【438396019505213†L143-L184】【438396019505213†L230-L236】.
-* Configure a PIR sensor, understanding its range and delay adjustments【221133490407826†L219-L223】【221133490407826†L237-L240】 and respecting its warm‑up period【352674793399350†L246-L249】.
-* Store and recall settings in EEPROM while minimising write cycles【264402201497082†L84-L86】.
+* Compare the DHT11 and DHT22 sensors and choose the right one for a temperature and humidity monitor.
+* Read a resistive water‑level sensor, power it efficiently and interpret its analog output.
+* Wire and operate a 16×2 LCD in 4‑bit mode, saving pins and controlling contrast.
+* Configure a PIR sensor, understanding its range and delay adjustments and respecting its warm‑up period.
+* Store and recall settings in EEPROM while minimising write cycles.
 * Design modular code to read sensors, display data, manage thresholds and control outputs.
 
 Armed with these skills, you are ready to tackle more ambitious IoT projects, combining different components and software techniques to build intelligent systems tailored to your needs.

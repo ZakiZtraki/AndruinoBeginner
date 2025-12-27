@@ -10,14 +10,14 @@
 
 ## Introduction: What is a 7‑segment display?
 
-A 7‑segment display consists of seven individual LEDs arranged in the shape of the number “8.” Each LED is labelled **a** through **g**, and an optional eighth LED serves as the decimal point. By turning on different combinations of segments, the display can show the digits 0–9 and a few characters【865751415830727†L166-L176】.
+A 7‑segment display consists of seven individual LEDs arranged in the shape of the number “8.” Each LED is labelled **a** through **g**, and an optional eighth LED serves as the decimal point. By turning on different combinations of segments, the display can show the digits 0–9 and a few characters ([Seven‑segment display](https://en.wikipedia.org/wiki/Seven-segment_display)).
 
 There are two main types of 7‑segment displays:
 
-* **Common cathode (CC)** – all the cathodes of the LED segments are connected together and tied to ground. To illuminate a segment, you drive its anode **HIGH**【865751415830727†L179-L184】. In many displays, pins 3 and 8 are the common cathodes【8206320365204†L150-L154】. The Jameco tutorial notes that setting a segment’s pin HIGH turns it on for a common cathode display【820333238483188†L10-L20】.
-* **Common anode (CA)** – all the anodes are connected together and tied to +5 V. To illuminate a segment, you pull its cathode **LOW**【82063320365204†L160-L164】. Common anode displays are popular because many microcontrollers can sink more current than they can source【865751415830727†L190-L203】.
+* **Common cathode (CC)** – all the cathodes of the LED segments are connected together and tied to ground. To illuminate a segment, you drive its anode **HIGH** ([Seven‑segment display](https://en.wikipedia.org/wiki/Seven-segment_display)). In many common‑cathode parts, pins 3 and 8 are the shared cathodes (for example, [Kingbright SA56‑11EWA datasheet](https://www.kingbrightusa.com/images/catalog/SPEC/SA56-11EWA.pdf)).
+* **Common anode (CA)** – all the anodes are connected together and tied to +5 V. To illuminate a segment, you pull its cathode **LOW** ([Seven‑segment display](https://en.wikipedia.org/wiki/Seven-segment_display)).
 
-In either case, each LED segment requires a **current‑limiting resistor**. Standard red LEDs have a forward voltage of about **2 V**, and each segment draws around **12–15 mA**, so a **220 Ω resistor** is appropriate on a 5 V system【865751415830727†L245-L258】.
+In either case, each LED segment requires a **current‑limiting resistor**. Typical red segments have a forward voltage around **2 V** and are rated for **20 mA** continuous current, so a **220 Ω resistor** is appropriate on a 5 V system to keep segment current in a safe range ([Kingbright SA56‑11EWA datasheet](https://www.kingbrightusa.com/images/catalog/SPEC/SA56-11EWA.pdf); [SparkFun LED tutorial](https://learn.sparkfun.com/tutorials/light-emitting-diodes-leds/all)).
 
 Most beginner kits use common cathode displays, so this lesson focuses on that type.
 
@@ -31,7 +31,7 @@ Most beginner kits use common cathode displays, so this lesson focuses on that t
 
 ## Activity 1 – Identify and test the display
 
-1. **Identify the pins.** A typical common cathode display has 10 pins: two common cathode pins (usually pins 3 and 8) and eight segment pins (a, b, c, d, e, f, g, dp). Consult the manufacturer’s datasheet to match each pin to its segment. Pins 3 and 8 should connect to ground【8206320365204†L150-L154】.
+1. **Identify the pins.** A typical common cathode display has 10 pins: two common cathode pins (often pins 3 and 8) and eight segment pins (a, b, c, d, e, f, g, dp). Consult the manufacturer’s datasheet to match each pin to its segment (for example, [Kingbright SA56‑11EWA datasheet](https://www.kingbrightusa.com/images/catalog/SPEC/SA56-11EWA.pdf)). Pins 3 and 8 should connect to ground.
 2. **Test each segment.** Temporarily connect each segment pin to +5 V through a 220 Ω resistor while the common pins are connected to GND. When you touch the resistor to a segment pin, its corresponding LED should light. This confirms your pinout.
 
 ## Activity 2 – Wiring the display
@@ -39,7 +39,7 @@ Most beginner kits use common cathode displays, so this lesson focuses on that t
 We’ll connect each segment to an Arduino digital pin through a resistor. The common cathode pins go to ground.
 
 1. Place the display on your breadboard. Connect both common cathode pins (3 and 8) to **GND**.
-2. Connect segment pins **a–g** and **dp** to Arduino pins **2–8** and **9** respectively (you can choose any unused pins). Insert a **220 Ω** resistor between each segment pin and the Arduino pin to limit current【865751415830727†L245-L258】.
+2. Connect segment pins **a–g** and **dp** to Arduino pins **2–8** and **9** respectively (you can choose any unused pins). Insert a **220 Ω** resistor between each segment pin and the Arduino pin to limit current.
 3. The wiring table might look like this:
 
 | Segment | Display pin | Arduino pin | Resistor |
@@ -115,7 +115,7 @@ For multi‑digit displays, you’ll learn about multiplexing in the next sectio
 
 ## Activity 5 – Introduction to multiplexing (advanced)
 
-Driving multiple digits individually would consume seven pins per digit. Instead, we can **multiplex** the displays: all segment pins (a–g) are shared, and each digit has its own common cathode or anode pin. We rapidly turn each digit on and off in sequence, updating the segments to show its value. Because the refresh happens faster than human vision, all digits appear lit at once. The Jameco tutorial notes that multiplexing requires only two additional pins per extra digit【820333238483188†L93-L99】 and demonstrates a simple two‑digit circuit.
+Driving multiple digits individually would consume seven pins per digit. Instead, we can **multiplex** the displays: all segment pins (a–g) are shared, and each digit has its own common cathode or anode pin. We rapidly turn each digit on and off in sequence, updating the segments to show its value. Because the refresh happens faster than human vision, all digits appear lit at once ([Seven‑segment display](https://en.wikipedia.org/wiki/Seven-segment_display)).
 
 Here’s a simplified overview:
 
@@ -130,4 +130,4 @@ We’ll explore full multiplexed displays and dedicated driver ICs (such as the 
 
 ## Summary
 
-In this lesson you learned that a 7‑segment display contains seven LED segments arranged to form numbers, plus an optional decimal point. Displays can be **common cathode**—where the cathodes are tied together and segments are lit by applying a HIGH signal—or **common anode**, where the anodes are tied together and segments are lit by pulling the cathode LOW【8206320365204†L150-L164】【865751415830727†L179-L193】. Each segment requires a current‑limiting resistor; a 220 Ω resistor is suitable for a 5 V system【865751415830727†L245-L258】. You wired a common cathode display to an Arduino, wrote code to display numbers 0–9, and built a countdown timer. You also learned how to show sensor data on the display and were introduced to multiplexing for multi‑digit displays. These skills prepare you to create richer interfaces for your projects and to integrate data from various sensors in the coming lessons.
+In this lesson you learned that a 7‑segment display contains seven LED segments arranged to form numbers, plus an optional decimal point. Displays can be **common cathode**—where the cathodes are tied together and segments are lit by applying a HIGH signal—or **common anode**, where the anodes are tied together and segments are lit by pulling the cathode LOW. Each segment requires a current‑limiting resistor; a 220 Ω resistor is suitable for a 5 V system. You wired a common cathode display to an Arduino, wrote code to display numbers 0–9, and built a countdown timer. You also learned how to show sensor data on the display and were introduced to multiplexing for multi‑digit displays. These skills prepare you to create richer interfaces for your projects and to integrate data from various sensors in the coming lessons.

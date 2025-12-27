@@ -12,15 +12,15 @@ By the end of this lesson you will be able to:
 
 ## Introduction
 
-In previous lessons you have been working with variables that live in **RAM**.  RAM is volatile, which means all of its contents disappear when the board loses power or is reset.  Sometimes you want your sketch to remember things between runs: the last brightness setting of an LED, the number of times a door has opened, or the calibration factor for a sensor.  That is where **EEPROM** (Electrically Erasable Programmable Read‑Only Memory) comes in.  EEPROM is a small section of non‑volatile memory built into many microcontrollers.  Values stored there remain intact when power is off【264402201497082†L84-L86】.  Because it is electrically erasable you can update its contents from your sketch while the microcontroller is running.
+In previous lessons you have been working with variables that live in **RAM**.  RAM is volatile, which means all of its contents disappear when the board loses power or is reset.  Sometimes you want your sketch to remember things between runs: the last brightness setting of an LED, the number of times a door has opened, or the calibration factor for a sensor.  That is where **EEPROM** (Electrically Erasable Programmable Read‑Only Memory) comes in.  EEPROM is a small section of non‑volatile memory built into many microcontrollers.  Values stored there remain intact when power is off.  Because it is electrically erasable you can update its contents from your sketch while the microcontroller is running.
 
 ### Capacity by board
 
-Not all Arduinos have the same amount of EEPROM.  Boards based on different AVR chips provide different capacities.  For example, boards using the ATmega328 (such as the Uno, Nano and LilyPad) have **1024 bytes** (1 KB) of EEPROM; ATmega168‑based boards have **512 bytes**; and boards using the ATmega1280 or ATmega2560 (such as the Mega) have **4096 bytes**【264402201497082†L95-L100】.  If you are unsure about your board’s capacity, consult the documentation or the hardware index.
+Not all Arduinos have the same amount of EEPROM.  Boards based on different AVR chips provide different capacities.  For example, boards using the ATmega328P (such as the Uno, Nano and LilyPad) have **1024 bytes** (1 KB) of EEPROM; ATmega168‑based boards have **512 bytes**; and boards using the ATmega1280 or ATmega2560 (such as the Mega) have **4096 bytes** ([ATmega328P datasheet](https://ww1.microchip.com/downloads/en/DeviceDoc/ATmega328P-Data-Sheet-DS40002061B.pdf); [ATmega1280/2560 datasheet](https://ww1.microchip.com/downloads/en/DeviceDoc/ATmega640-1280-1281-2560-2561-Data-Sheet-DS40002211A.pdf)).  If you are unsure about your board’s capacity, consult the documentation or the hardware index.
 
 ### Endurance
 
-Each EEPROM cell can only be erased and re‑programmed a finite number of times.  Atmel (now Microchip) specify that the AVR’s internal EEPROM can handle about **100 000 read/write cycles per location**【264402201497082†L84-L87】.  Exceeding this limit doesn’t instantly destroy the memory, but after around this many writes the data retention time decreases.  Reads are unlimited【577675601178878†L82-L85】.  Therefore you should avoid writing the same value repeatedly—one of the best ways to do this is to use `EEPROM.update()` instead of `EEPROM.write()`.
+Each EEPROM cell can only be erased and re‑programmed a finite number of times.  Atmel (now Microchip) specify that the AVR’s internal EEPROM can handle about **100 000 write/erase cycles per location** ([ATmega328P datasheet](https://ww1.microchip.com/downloads/en/DeviceDoc/ATmega328P-Data-Sheet-DS40002061B.pdf)).  Exceeding this limit doesn’t instantly destroy the memory, but after around this many writes the data retention time decreases.  Reads are unlimited.  Therefore you should avoid writing the same value repeatedly—one of the best ways to do this is to use `EEPROM.update()` instead of `EEPROM.write()` ([Arduino EEPROM library](https://docs.arduino.cc/learn/built-in-libraries/eeprom/)).
 
 ### Accessing the library
 
@@ -58,7 +58,7 @@ where `value` is an integer between 0 and 255.  For example, to save the numbe
 EEPROM.write(0, 9);
 ```
 
-To **read** a byte you call `EEPROM.read(address)` and it returns the stored value【264402201497082†L119-L130】.  So to retrieve the value at address 0 you write:
+To **read** a byte you call `EEPROM.read(address)` and it returns the stored value.  So to retrieve the value at address 0 you write:
 
 ```cpp
 int stored = EEPROM.read(0);
@@ -72,7 +72,7 @@ Because each write consumes one of the limited erase/write cycles, avoid writing
 EEPROM.update(address, value);
 ```
 
-compares the new `value` with what is already stored and only performs the write when they differ.  The Arduino documentation notes that an EEPROM write takes about **3.3 ms** and that `update()` helps avoid unnecessary writes, extending the EEPROM’s life【613704770013087†screenshot】.  Use `update()` instead of `write()` when periodically storing values that might not have changed.
+compares the new `value` with what is already stored and only performs the write when they differ.  The Arduino documentation notes that an EEPROM write takes about **3.3 ms** and that `update()` helps avoid unnecessary writes, extending the EEPROM’s life ([Arduino EEPROM library](https://docs.arduino.cc/learn/built-in-libraries/eeprom/)).  Use `update()` instead of `write()` when periodically storing values that might not have changed.
 
 ### Storing other data types
 
@@ -201,7 +201,7 @@ void loop() {
 
 ## Storing multiple‑byte values with `put()` and `get()`
 
-Suppose you want to store a floating‑point calibration factor or a structure of user settings.  The EEPROM library provides `EEPROM.put()` and `EEPROM.get()` to read and write arbitrary data types without manually splitting them into bytes.  These functions also use `update()` internally, so they avoid unnecessary writes.【577675601178878†L147-L154】.
+Suppose you want to store a floating‑point calibration factor or a structure of user settings.  The EEPROM library provides `EEPROM.put()` and `EEPROM.get()` to read and write arbitrary data types without manually splitting them into bytes.  These functions also use `update()` internally, so they avoid unnecessary writes..
 
 Here’s a simple example that remembers a temperature threshold for a fan controller:
 
@@ -252,7 +252,7 @@ Here we define a `Settings` struct containing a floating‑point temperature thr
 
 | Mistake | Consequence | How to avoid |
 | --- | --- | --- |
-| Writing in a tight loop or within a sensor sampling loop | You quickly exhaust the 100 k write endurance of a single EEPROM address【264402201497082†L84-L87】 | Write to EEPROM only when the value actually changes (use `update()` and thresholds) or buffer updates to happen at longer intervals |
+| Writing in a tight loop or within a sensor sampling loop | You quickly exhaust the 100 k write endurance of a single EEPROM address | Write to EEPROM only when the value actually changes (use `update()` and thresholds) or buffer updates to happen at longer intervals |
 | Forgetting to include `<EEPROM.h>` | Compilation error because functions aren’t defined | Always include the library before using any EEPROM functions |
 | Storing values larger than 255 with `write()`/`update()` | Data is truncated and you lose information | Use `EEPROM.put()`/`get()` for multi‑byte types |
 | Overlapping stored data | Later writes corrupt earlier data | Plan your memory map: allocate specific addresses or use sequential addresses returned from `put()` |
@@ -269,10 +269,10 @@ Here we define a `Settings` struct containing a floating‑point temperature thr
 
 ## Additional resources
 
-- **Arduino EEPROM guide:** The Instructables article provides an accessible introduction to EEPROM and lists the memory sizes for different boards【264402201497082†L95-L100】.
-- **Random Nerd Tutorials – Arduino EEPROM explained:** Details how to use `read()`, `write()`, `update()`, and explains the 100 k write/erase limit【577675601178878†L65-L85】.
-- **Arduino documentation:** The official EEPROM library page includes examples and notes on using `update()` to avoid unnecessary writes and explains that each write takes about 3.3 ms【613704770013087†screenshot】.
+- **Arduino EEPROM guide:** The Instructables article provides an accessible introduction to EEPROM and lists the memory sizes for different boards.
+- **Random Nerd Tutorials – Arduino EEPROM explained:** Details how to use `read()`, `write()`, `update()`, and explains the 100 k write/erase limit.
+- **Arduino documentation:** The official EEPROM library page includes examples and notes on using `update()` to avoid unnecessary writes and explains that each write takes about 3.3 ms.
 
 ## Summary
 
-EEPROM provides a small but powerful way to store data that persists when the Arduino loses power.  Boards with ATmega328P, such as the Uno, offer 1 KB of storage, while Mega boards provide 4 KB【264402201497082†L95-L100】.  Each memory cell can handle about 100 000 write cycles, so it’s important to minimise unnecessary writes【264402201497082†L84-L86】.  By using `EEPROM.read()`, `EEPROM.update()` and the higher‑level `put()`/`get()` functions, you can remember states, save user settings, or accumulate counters across resets.  Careful planning of the memory map and validating loaded data will help you build reliable, persistent projects.
+EEPROM provides a small but powerful way to store data that persists when the Arduino loses power.  Boards with ATmega328P, such as the Uno, offer 1 KB of storage, while Mega boards provide 4 KB ([ATmega328P datasheet](https://ww1.microchip.com/downloads/en/DeviceDoc/ATmega328P-Data-Sheet-DS40002061B.pdf); [ATmega1280/2560 datasheet](https://ww1.microchip.com/downloads/en/DeviceDoc/ATmega640-1280-1281-2560-2561-Data-Sheet-DS40002211A.pdf)).  Each memory cell can handle about 100 000 write cycles, so it’s important to minimise unnecessary writes ([ATmega328P datasheet](https://ww1.microchip.com/downloads/en/DeviceDoc/ATmega328P-Data-Sheet-DS40002061B.pdf)).  By using `EEPROM.read()`, `EEPROM.update()` and the higher‑level `put()`/`get()` functions, you can remember states, save user settings, or accumulate counters across resets.  Careful planning of the memory map and validating loaded data will help you build reliable, persistent projects.

@@ -6,10 +6,10 @@ After becoming familiar with the ESP32’s capabilities in Day 22, it’s time 
 
 By completing this lesson you will be able to:
 
-1. Identify **safe GPIO pins**, **input‑only pins** and **strapping pins** on the ESP32【101643182054638†L87-L100】.
+1. Identify **safe GPIO pins**, **input‑only pins** and **strapping pins** on the ESP32.
 2. Use `digitalRead()` and `digitalWrite()` to read buttons and drive LEDs while avoiding pins that can disrupt boot.
-3. Read analog voltages with `analogRead()`, understand the 12‑bit (0–4095) resolution and convert readings to volts【798521705858314†L52-L57】.
-4. Generate PWM signals using the **LEDC library** by selecting a channel, frequency and resolution【35371649993462†L270-L297】.
+3. Read analog voltages with `analogRead()`, understand the 12‑bit (0–4095) resolution and convert readings to volts.
+4. Generate PWM signals using the **LEDC library** by selecting a channel, frequency and resolution.
 5. Combine analog input and PWM output to build a **light‑sensitive night‑light**.
 
 ## Materials
@@ -23,13 +23,12 @@ By completing this lesson you will be able to:
 
 ## 1. ESP32 GPIO overview
 
-Unlike the Arduino Uno’s numbered digital/analog labels, the ESP32 exposes up to 34 GPIOs that can have multiple functions.  Some pins are safe for general use, others are input‑only or reserved for boot configuration (strapping).  A beginner‑friendly summary from LearnIoT lists:
+Unlike the Arduino Uno’s numbered digital/analog labels, the ESP32 exposes up to 34 GPIOs that can have multiple functions.  Some pins are reserved for boot configuration (strapping), and others are input‑only ([ESP32 datasheet](https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf)):
 
-- **Safe GPIOs:** 16 (RX2), 17 (TX2), 13, 14, 25, 26, 27 for LEDs and motors; 32 and 33 for analog sensors; 21 (SDA) and 22 (SCL) for I²C【101643182054638†L87-L94】.
-- **Strapping pins to avoid:** 0, 2, 5, 12 and 15.  These pins determine the ESP32’s boot mode; connecting them to external circuits can prevent the board from starting【101643182054638†L96-L100】.
-- **Input‑only pins:** 34, 35, 36 and 39 can only be used as inputs (e.g. analog sensors); they cannot drive LEDs【101643182054638†L99-L100】.
+- **Strapping pins to avoid during boot:** 0, 2, 5, 12 and 15.  These pins determine the ESP32’s boot mode; connecting them to external circuits can prevent the board from starting.
+- **Input‑only pins:** 34, 35, 36 and 39 can only be used as inputs (e.g. analog sensors); they cannot drive LEDs.
 
-Use safe GPIOs for general digital I/O.  When using a pin for a specific peripheral (I²C, SPI, UART), follow the mapping shown in your board’s pinout.  Remember that all pins operate at **3.3 V logic**—connecting 5 V signals directly may damage the ESP32.
+For general digital I/O, choose pins that are **not** strapping pins and **not** input‑only, and follow the mapping shown in your board’s pinout.  Remember that all pins operate at **3.3 V logic**—connecting 5 V signals directly may damage the ESP32 ([ESP32 datasheet](https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf)).
 
 ## 2. Digital input and output
 
@@ -67,7 +66,7 @@ void loop() {
 }
 ```
 
-This code monitors the button for a **rising edge** and toggles the LED state.  The 10 ms delay helps debounce the switch.  Avoid using the strapping pins (0, 2, 5, 12, 15) in your circuits to prevent boot issues【101643182054638†L96-L100】.
+This code monitors the button for a **rising edge** and toggles the LED state.  The 10 ms delay helps debounce the switch.  Avoid using the strapping pins (0, 2, 5, 12, 15) in your circuits to prevent boot issues ([ESP32 datasheet](https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf)).
 
 ### Using internal pull‑ups
 
@@ -75,14 +74,14 @@ Alternatively, you can wire the button between the pin and **GND**, and enable t
 
 ## 3. Reading analog sensors
 
-The ESP32’s Analog‑to‑Digital Converter (ADC) can measure voltages between **0 V and 3.3 V**.  The measured voltage is mapped to a **12‑bit value (0–4095)**—0 V corresponds to 0 and 3.3 V to 4095【798521705858314†L52-L57】.  To read a sensor value:
+The ESP32’s Analog‑to‑Digital Converter (ADC) supports **12‑bit resolution (0–4095)**.  With the default 11 dB attenuation, the input range is roughly **0–3.3 V**, so 0 V corresponds to 0 and 3.3 V to 4095 ([ESP32 datasheet](https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf), [ESP‑IDF ADC docs](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/adc.html)).  To read a sensor value:
 
 ```cpp
 int raw = analogRead(32);               // read from a safe ADC1 pin
 float voltage = raw * 3.3 / 4095.0;    // convert to volts
 ```
 
-**Important:** Some ADC pins belong to ADC2, which cannot be used while Wi‑Fi is active.  Use ADC1 pins (GPIO 32–33 for analog sensors; GPIO 34–39 for input‑only sensors) when your ESP32 is connected to Wi‑Fi【798521705858314†L96-L101】.
+**Important:** Some ADC pins belong to ADC2, which cannot be used while Wi‑Fi is active.  Use ADC1 pins (GPIO 32–33 for analog sensors; GPIO 34–39 for input‑only sensors) when your ESP32 is connected to Wi‑Fi ([ESP‑IDF ADC docs](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/adc.html)).
 
 ### Photoresistor example
 
@@ -107,17 +106,17 @@ void loop() {
 }
 ```
 
-Watch the voltage increase when you shine a flashlight on the sensor and decrease in the dark.  Keep in mind that the ESP32 ADC is not perfectly linear and may saturate near 0 V or 3.3 V【798521705858314†L70-L74】.
+Watch the voltage increase when you shine a flashlight on the sensor and decrease in the dark.  Keep in mind that the ESP32 ADC is not perfectly linear and may saturate near 0 V or 3.3 V ([ESP‑IDF ADC calibration](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/adc_calibration.html)).
 
 ## 4. Generating PWM signals with the LEDC library
 
-Unlike the Arduino Uno, the ESP32 does not support `analogWrite()`.  Instead, it includes a **LEDC (LED Control) peripheral** with **16 independent channels** capable of generating PWM signals with configurable frequency and resolution【35371649993462†L270-L297】.  To generate PWM with the LEDC library:
+The ESP32 generates PWM using the **LEDC (LED Control) peripheral**, which provides **16 channels** with configurable frequency and resolution ([Arduino‑ESP32 LEDC docs](https://docs.espressif.com/projects/arduino-esp32/en/latest/api/ledc.html)).  To generate PWM with the LEDC library:
 
 1. **Select a channel (0–15) and pin.**
-2. **Choose a PWM frequency.**  For LED dimming, 500 Hz is sufficient【35371649993462†L270-L297】.  Servo motors require ~50 Hz, while buzzers or motors may use higher frequencies.
-3. **Choose a resolution (1–16 bits).**  An 8‑bit resolution gives 256 discrete duty‑cycle levels (0–255)【35371649993462†L284-L289】.
-4. **Attach the pin to the channel** with `ledcAttachChannel(pin, freq, resolution, channel)`【35371649993462†L290-L297】.
-5. **Set the duty cycle** using `ledcWrite(channel, dutyCycle)` or `ledcWriteChannel(channel, dutyCycle)`【35371649993462†L296-L297】.
+2. **Choose a PWM frequency.**  For LED dimming, 500 Hz is sufficient.  Servo motors require ~50 Hz, while buzzers or motors may use higher frequencies.
+3. **Choose a resolution (1–16 bits).**  An 8‑bit resolution gives 256 discrete duty‑cycle levels (0–255).
+4. **Configure the channel** with `ledcSetup(channel, freq, resolution)`.
+5. **Attach the pin** using `ledcAttachPin(pin, channel)`, then set the duty cycle using `ledcWrite(channel, dutyCycle)`.
 
 ### Fading an LED
 
@@ -130,8 +129,9 @@ const int PWM_RESOLUTION = 8;    // 8‑bit resolution (0–255)
 const int LED_PIN        = 18;   // safe GPIO with PWM capability
 
 void setup() {
-  // Attach the pin to the channel with selected frequency and resolution
-  ledcAttachChannel(LED_PIN, PWM_FREQ, PWM_RESOLUTION, PWM_CHANNEL);
+  // Configure channel and attach the pin
+  ledcSetup(PWM_CHANNEL, PWM_FREQ, PWM_RESOLUTION);
+  ledcAttachPin(LED_PIN, PWM_CHANNEL);
 }
 
 void loop() {
@@ -148,7 +148,7 @@ void loop() {
 }
 ```
 
-This example uses an 8‑bit resolution (like Arduino) and gradually ramps the duty cycle up and down to smoothly change the LED’s brightness.  The `ledcAttachChannel()` call must occur in `setup()` before `ledcWrite()` can be used【35371649993462†L290-L297】.
+This example uses an 8‑bit resolution (like Arduino) and gradually ramps the duty cycle up and down to smoothly change the LED’s brightness.  The `ledcSetup()` and `ledcAttachPin()` calls must occur in `setup()` before `ledcWrite()` can be used.
 
 ### Light‑sensitive night‑light
 
@@ -163,7 +163,8 @@ const int pwmResolution = 8;     // 8‑bit resolution
 
 void setup() {
   Serial.begin(115200);
-  ledcAttachChannel(ledPin, pwmFreq, pwmResolution, pwmChannel);
+  ledcSetup(pwmChannel, pwmFreq, pwmResolution);
+  ledcAttachPin(ledPin, pwmChannel);
 }
 
 void loop() {
@@ -178,38 +179,38 @@ void loop() {
 }
 ```
 
-As the environment gets darker, the LED brightens.  Feel free to adjust the mapping range or invert behaviour.  If you’re running Wi‑Fi concurrently, make sure to use ADC1 pins for the photoresistor【798521705858314†L96-L101】.
+As the environment gets darker, the LED brightens.  Feel free to adjust the mapping range or invert behaviour.  If you’re running Wi‑Fi concurrently, make sure to use ADC1 pins for the photoresistor.
 
 ## 5. Extensions and challenges
 
 * **Servo control:** For small servos, use the `ESP32Servo` library, which wraps LEDC for 50 Hz signals.  Combine a potentiometer on an ADC1 pin with `ledcWrite` to control servo angle.
 * **Digital motion sensor:** Re‑wire the PIR sensor from Day 8 to 3.3 V, connect its digital output to a safe pin (e.g. 27) and use `digitalRead()` to trigger a buzzer via PWM.
-* **I²C sensors:** Use GPIO 21 and 22 for I²C devices like the DHT22 or LCD from previous lessons.  These pins are safe for I²C【101643182054638†L87-L94】.
+* **I²C sensors:** Use GPIO 21 (SDA) and 22 (SCL) for I²C devices like a BME280 or an LCD with an I²C backpack; these are the default pins in the Arduino‑ESP32 core ([Arduino‑ESP32 Wire](https://docs.espressif.com/projects/arduino-esp32/en/latest/api/i2c.html)).
 
 ## 6. Troubleshooting
 
 | Symptom | Possible cause | Solution |
 |---|---|---|
-| ESP32 doesn’t boot | Using a strapping pin (0, 2, 5, 12, 15) for inputs/outputs【101643182054638†L96-L100】 | Move your circuit to a safe GPIO; leave strapping pins unconnected during boot. |
-| Analog reading stuck at 0 or 4095 | Using an **ADC2** pin while Wi‑Fi is active【798521705858314†L96-L101】 | Use ADC1 pins (32–39); disable Wi‑Fi or change pin. |
-| LEDC PWM doesn’t work | Forgetting to call `ledcAttachChannel()` | Always attach the pin to a channel in `setup()` before calling `ledcWrite`. |
+| ESP32 doesn’t boot | Using a strapping pin (0, 2, 5, 12, 15) for inputs/outputs | Move your circuit to a safe GPIO; leave strapping pins unconnected during boot. |
+| Analog reading stuck at 0 or 4095 | Using an **ADC2** pin while Wi‑Fi is active | Use ADC1 pins (32–39); disable Wi‑Fi or change pin ([ESP‑IDF ADC docs](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/adc.html)). |
+| LEDC PWM doesn’t work | Forgetting to call `ledcSetup()`/`ledcAttachPin()` | Configure the channel and attach the pin in `setup()` before calling `ledcWrite`. |
 | LED flickers when Wi‑Fi transmits | Insufficient power supply | Use a robust 5 V supply; power large loads separately. |
 | Button doesn’t respond | Missing pull‑up/pull‑down resistor | Use an external 10 kΩ resistor or `INPUT_PULLUP`. |
-| ADC values non‑linear | ESP32 ADC has non‑linear behaviour near 0 V and 3.3 V【798521705858314†L70-L74】 | Keep signals within mid‑range (0.1–3.2 V) or calibrate using `analogSetAttenuation()`. |
+| ADC values non‑linear | ESP32 ADC has non‑linear behaviour near 0 V and 3.3 V | Keep signals within mid‑range (0.1–3.2 V) or calibrate using `analogSetAttenuation()` ([ESP‑IDF ADC calibration](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/adc_calibration.html), [Arduino‑ESP32 analog](https://docs.espressif.com/projects/arduino-esp32/en/latest/api/adc.html)). |
 
 ## 7. Going further
 
 * Explore **GPIO interrupts** to detect button presses without polling.
-* Learn to change ADC **attenuation** and **width** with `analogSetAttenuation()` and `analogSetWidth()` to customise range and resolution【798521705858314†L108-L120】.
+* Learn to change ADC **attenuation** and **width** with `analogSetAttenuation()` and `analogSetWidth()` to customise range and resolution.
 * Use the **LEDC library** to drive multiple LEDs on different channels or play melodies on a buzzer.
 * Combine I²C sensors (e.g., BME280) with Wi‑Fi to publish data to a web server (Day 24).
 * For accurate analog readings, implement oversampling and median filtering.
 
 ## Key takeaways
 
-* Use **safe GPIO pins** (16, 17, 13, 14, 25, 26, 27, 32, 33) and avoid **strapping pins** (0, 2, 5, 12, 15) to prevent boot issues【101643182054638†L87-L100】.
-* The ESP32 ADC measures 0–3.3 V with 12‑bit resolution, returning values from **0 to 4095**【798521705858314†L52-L57】.  ADC2 pins are unavailable when Wi‑Fi is used【798521705858314†L96-L101】.
-* The LEDC peripheral provides flexible PWM on 16 channels; configure frequency, resolution and channel before writing duty cycles【35371649993462†L270-L297】.
+* Use GPIOs that are **not** strapping pins (0, 2, 5, 12, 15) and remember that GPIO 34–39 are input‑only ([ESP32 datasheet](https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf)).
+* The ESP32 ADC provides 12‑bit readings (0–4095) and ADC2 pins are unavailable while Wi‑Fi is active ([ESP32 datasheet](https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf), [ESP‑IDF ADC docs](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/adc.html)).
+* The LEDC peripheral provides flexible PWM on 16 channels; configure frequency, resolution and channel before writing duty cycles ([Arduino‑ESP32 LEDC docs](https://docs.espressif.com/projects/arduino-esp32/en/latest/api/ledc.html)).
 * By combining analog input and PWM output you can build responsive, sensor‑based projects like a light‑sensitive night‑light.
 
 In Day 24, you’ll turn the ESP32 into a web server to display sensor readings and control outputs remotely.
